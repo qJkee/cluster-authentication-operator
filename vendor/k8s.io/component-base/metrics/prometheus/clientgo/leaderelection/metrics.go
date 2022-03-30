@@ -19,7 +19,6 @@ package leaderelection
 import (
 	"k8s.io/client-go/tools/leaderelection"
 	k8smetrics "k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 var (
@@ -30,8 +29,8 @@ var (
 )
 
 func init() {
-	legacyregistry.MustRegister(leaderGauge)
-	leaderelection.SetProvider(prometheusMetricsProvider{})
+	// legacyregistry.MustRegister(leaderGauge)
+	// leaderelection.SetProvider(prometheusMetricsProvider{})
 }
 
 type prometheusMetricsProvider struct{}
@@ -45,9 +44,9 @@ type switchAdapter struct {
 }
 
 func (s *switchAdapter) On(name string) {
-	s.gauge.WithLabelValues(name).Set(1.0)
+	// s.gauge.WithLabelValues(name).Set(1.0)
 }
 
 func (s *switchAdapter) Off(name string) {
-	s.gauge.WithLabelValues(name).Set(0.0)
+	// s.gauge.WithLabelValues(name).Set(0.0)
 }

@@ -22,7 +22,6 @@ import (
 
 	auditinternal "k8s.io/apiserver/pkg/apis/audit"
 	"k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 	"k8s.io/klog/v2"
 )
 
@@ -78,20 +77,20 @@ var (
 )
 
 func init() {
-	legacyregistry.MustRegister(eventCounter)
-	legacyregistry.MustRegister(errorCounter)
-	legacyregistry.MustRegister(levelCounter)
-	legacyregistry.MustRegister(ApiserverAuditDroppedCounter)
+	// legacyregistry.MustRegister(eventCounter)
+	// legacyregistry.MustRegister(errorCounter)
+	// legacyregistry.MustRegister(levelCounter)
+	// legacyregistry.MustRegister(ApiserverAuditDroppedCounter)
 }
 
 // ObserveEvent updates the relevant prometheus metrics for the generated audit event.
 func ObserveEvent(ctx context.Context) {
-	eventCounter.WithContext(ctx).Inc()
+	// eventCounter.WithContext(ctx).Inc()
 }
 
 // ObservePolicyLevel updates the relevant prometheus metrics with the audit level for a request.
 func ObservePolicyLevel(ctx context.Context, level auditinternal.Level) {
-	levelCounter.WithContext(ctx).WithLabelValues(string(level)).Inc()
+	// levelCounter.WithContext(ctx).WithLabelValues(string(level)).Inc()
 }
 
 // HandlePluginError handles an error that occurred in an audit plugin. This method should only be
@@ -99,7 +98,7 @@ func ObservePolicyLevel(ctx context.Context, level auditinternal.Level) {
 // logged to the debug log.
 func HandlePluginError(plugin string, err error, impacted ...*auditinternal.Event) {
 	// Count the error.
-	errorCounter.WithLabelValues(plugin).Add(float64(len(impacted)))
+	// errorCounter.WithLabelValues(plugin).Add(float64(len(impacted)))
 
 	// Log the audit events to the debug log.
 	msg := fmt.Sprintf("Error in audit plugin '%s' affecting %d audit events: %v\nImpacted events:\n",

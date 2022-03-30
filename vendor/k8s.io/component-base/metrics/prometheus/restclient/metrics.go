@@ -18,14 +18,11 @@ package restclient
 
 import (
 	"context"
-	"fmt"
-	"math"
 	"net/url"
 	"time"
 
 	"k8s.io/client-go/tools/metrics"
 	k8smetrics "k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 var (
@@ -70,10 +67,11 @@ var (
 			StabilityLevel: k8smetrics.ALPHA,
 		},
 		func() float64 {
-			if execPluginCertTTLAdapter.e == nil {
-				return math.Inf(1)
-			}
-			return execPluginCertTTLAdapter.e.Sub(time.Now()).Seconds()
+			// if execPluginCertTTLAdapter.e == nil {
+			// 	return math.Inf(1)
+			// }
+			// return execPluginCertTTLAdapter.e.Sub(time.Now()).Seconds()
+			return 0
 		},
 	)
 
@@ -120,11 +118,11 @@ var (
 
 func init() {
 
-	legacyregistry.MustRegister(requestLatency)
-	legacyregistry.MustRegister(rateLimiterLatency)
-	legacyregistry.MustRegister(requestResult)
-	legacyregistry.RawMustRegister(execPluginCertTTL)
-	legacyregistry.MustRegister(execPluginCertRotation)
+	// legacyregistry.MustRegister(requestLatency)
+	// legacyregistry.MustRegister(rateLimiterLatency)
+	// legacyregistry.MustRegister(requestResult)
+	// legacyregistry.RawMustRegister(execPluginCertTTL)
+	// legacyregistry.MustRegister(execPluginCertRotation)
 	metrics.Register(metrics.RegisterOpts{
 		ClientCertExpiry:      execPluginCertTTLAdapter,
 		ClientCertRotationAge: &rotationAdapter{m: execPluginCertRotation},
@@ -140,7 +138,7 @@ type latencyAdapter struct {
 }
 
 func (l *latencyAdapter) Observe(ctx context.Context, verb string, u url.URL, latency time.Duration) {
-	l.m.WithContext(ctx).WithLabelValues(verb, u.String()).Observe(latency.Seconds())
+	// l.m.WithContext(ctx).WithLabelValues(verb, u.String()).Observe(latency.Seconds())
 }
 
 type resultAdapter struct {
@@ -148,7 +146,7 @@ type resultAdapter struct {
 }
 
 func (r *resultAdapter) Increment(ctx context.Context, code, method, host string) {
-	r.m.WithContext(ctx).WithLabelValues(code, method, host).Inc()
+	// r.m.WithContext(ctx).WithLabelValues(code, method, host).Inc()
 }
 
 type expiryToTTLAdapter struct {
@@ -156,7 +154,7 @@ type expiryToTTLAdapter struct {
 }
 
 func (e *expiryToTTLAdapter) Set(expiry *time.Time) {
-	e.e = expiry
+	// e.e = expiry
 }
 
 type rotationAdapter struct {
@@ -164,7 +162,7 @@ type rotationAdapter struct {
 }
 
 func (r *rotationAdapter) Observe(d time.Duration) {
-	r.m.Observe(d.Seconds())
+	// r.m.Observe(d.Seconds())
 }
 
 type callsAdapter struct {
@@ -172,5 +170,5 @@ type callsAdapter struct {
 }
 
 func (r *callsAdapter) Increment(code int, callStatus string) {
-	r.m.WithLabelValues(fmt.Sprintf("%d", code), callStatus).Inc()
+	// r.m.WithLabelValues(fmt.Sprintf("%d", code), callStatus).Inc()
 }

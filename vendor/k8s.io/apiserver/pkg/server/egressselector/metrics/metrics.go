@@ -20,7 +20,6 @@ import (
 	"time"
 
 	"k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 	"k8s.io/utils/clock"
 )
 
@@ -82,8 +81,8 @@ func newDialMetrics() *DialMetrics {
 		[]string{"protocol", "transport", "stage"},
 	)
 
-	legacyregistry.MustRegister(latencies)
-	legacyregistry.MustRegister(failures)
+	// legacyregistry.MustRegister(latencies)
+	// legacyregistry.MustRegister(failures)
 	return &DialMetrics{latencies: latencies, failures: failures, clock: clock.RealClock{}}
 }
 
@@ -105,10 +104,10 @@ func (m *DialMetrics) Reset() {
 
 // ObserveDialLatency records the latency of a dial, labeled by protocol, transport.
 func (m *DialMetrics) ObserveDialLatency(elapsed time.Duration, protocol, transport string) {
-	m.latencies.WithLabelValues(protocol, transport).Observe(elapsed.Seconds())
+	// m.latencies.WithLabelValues(protocol, transport).Observe(elapsed.Seconds())
 }
 
 // ObserveDialFailure records a failed dial, labeled by protocol, transport, and the stage the dial failed at.
 func (m *DialMetrics) ObserveDialFailure(protocol, transport, stage string) {
-	m.failures.WithLabelValues(protocol, transport, stage).Inc()
+	// m.failures.WithLabelValues(protocol, transport, stage).Inc()
 }

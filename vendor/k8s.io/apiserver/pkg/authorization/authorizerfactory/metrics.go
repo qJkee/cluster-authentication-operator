@@ -20,16 +20,15 @@ import (
 	"context"
 
 	compbasemetrics "k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 type registerables []compbasemetrics.Registerable
 
 // init registers all metrics
 func init() {
-	for _, metric := range metrics {
-		legacyregistry.MustRegister(metric)
-	}
+	// for _, metric := range metrics {
+	// 	legacyregistry.MustRegister(metric)
+	// }
 }
 
 var (
@@ -60,10 +59,10 @@ var (
 
 // RecordRequestTotal increments the total number of requests for the delegated authorization.
 func RecordRequestTotal(ctx context.Context, code string) {
-	requestTotal.WithContext(ctx).WithLabelValues(code).Add(1)
+	// requestTotal.WithContext(ctx).WithLabelValues(code).Add(1)
 }
 
 // RecordRequestLatency measures request latency in seconds for the delegated authorization. Broken down by status code.
 func RecordRequestLatency(ctx context.Context, code string, latency float64) {
-	requestLatency.WithContext(ctx).WithLabelValues(code).Observe(latency)
+	// requestLatency.WithContext(ctx).WithLabelValues(code).Observe(latency)
 }

@@ -21,7 +21,6 @@ import (
 	"time"
 
 	"k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 const (
@@ -73,8 +72,8 @@ var registerMetricsFunc sync.Once
 
 func registerMetrics() {
 	registerMetricsFunc.Do(func() {
-		legacyregistry.MustRegister(dekCacheFillPercent)
-		legacyregistry.MustRegister(dekCacheInterArrivals)
+		// legacyregistry.MustRegister(dekCacheFillPercent)
+		// legacyregistry.MustRegister(dekCacheInterArrivals)
 	})
 }
 
@@ -87,7 +86,7 @@ func recordArrival(transformationType string, start time.Time) {
 		if lastFromStorage.IsZero() {
 			lastFromStorage = start
 		}
-		dekCacheInterArrivals.WithLabelValues(transformationType).Observe(start.Sub(lastFromStorage).Seconds())
+		// dekCacheInterArrivals.WithLabelValues(transformationType).Observe(start.Sub(lastFromStorage).Seconds())
 		lastFromStorage = start
 	case toStorageLabel:
 		lockLastToStorage.Lock()
@@ -96,7 +95,7 @@ func recordArrival(transformationType string, start time.Time) {
 		if lastToStorage.IsZero() {
 			lastToStorage = start
 		}
-		dekCacheInterArrivals.WithLabelValues(transformationType).Observe(start.Sub(lastToStorage).Seconds())
+		// dekCacheInterArrivals.WithLabelValues(transformationType).Observe(start.Sub(lastToStorage).Seconds())
 		lastToStorage = start
 	}
 }

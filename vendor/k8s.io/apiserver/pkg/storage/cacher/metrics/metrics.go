@@ -20,7 +20,6 @@ import (
 	"sync"
 
 	compbasemetrics "k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 /*
@@ -64,15 +63,15 @@ var registerMetrics sync.Once
 func Register() {
 	// Register the metrics.
 	registerMetrics.Do(func() {
-		legacyregistry.MustRegister(listCacheCount)
-		legacyregistry.MustRegister(listCacheNumFetched)
-		legacyregistry.MustRegister(listCacheNumReturned)
+		// legacyregistry.MustRegister(listCacheCount)
+		// legacyregistry.MustRegister(listCacheNumFetched)
+		// legacyregistry.MustRegister(listCacheNumReturned)
 	})
 }
 
 // RecordListCacheMetrics notes various metrics of the cost to serve a LIST request
 func RecordListCacheMetrics(resourcePrefix, indexName string, numFetched, numReturned int) {
-	listCacheCount.WithLabelValues(resourcePrefix, indexName).Inc()
-	listCacheNumFetched.WithLabelValues(resourcePrefix, indexName).Add(float64(numFetched))
-	listCacheNumReturned.WithLabelValues(resourcePrefix).Add(float64(numReturned))
+	// listCacheCount.WithLabelValues(resourcePrefix, indexName).Inc()
+	// listCacheNumFetched.WithLabelValues(resourcePrefix, indexName).Add(float64(numFetched))
+	// listCacheNumReturned.WithLabelValues(resourcePrefix).Add(float64(numReturned))
 }

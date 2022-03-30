@@ -18,7 +18,6 @@ package cacher
 
 import (
 	"k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 /*
@@ -77,19 +76,19 @@ var (
 )
 
 func init() {
-	legacyregistry.MustRegister(initCounter)
-	legacyregistry.MustRegister(terminatedWatchersCounter)
-	legacyregistry.MustRegister(watchCacheCapacityIncreaseTotal)
-	legacyregistry.MustRegister(watchCacheCapacityDecreaseTotal)
-	legacyregistry.MustRegister(watchCacheCapacity)
+	// legacyregistry.MustRegister(initCounter)
+	// legacyregistry.MustRegister(terminatedWatchersCounter)
+	// legacyregistry.MustRegister(watchCacheCapacityIncreaseTotal)
+	// legacyregistry.MustRegister(watchCacheCapacityDecreaseTotal)
+	// legacyregistry.MustRegister(watchCacheCapacity)
 }
 
 // recordsWatchCacheCapacityChange record watchCache capacity resize(increase or decrease) operations.
 func recordsWatchCacheCapacityChange(objType string, old, new int) {
-	watchCacheCapacity.WithLabelValues(objType).Set(float64(new))
+	// watchCacheCapacity.WithLabelValues(objType).Set(float64(new))
 	if old < new {
-		watchCacheCapacityIncreaseTotal.WithLabelValues(objType).Inc()
+		// watchCacheCapacityIncreaseTotal.WithLabelValues(objType).Inc()
 		return
 	}
-	watchCacheCapacityDecreaseTotal.WithLabelValues(objType).Inc()
+	// watchCacheCapacityDecreaseTotal.WithLabelValues(objType).Inc()
 }

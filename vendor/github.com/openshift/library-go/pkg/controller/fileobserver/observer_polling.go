@@ -12,7 +12,6 @@ import (
 
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 	"k8s.io/klog/v2"
 )
 
@@ -121,7 +120,7 @@ func (o *pollingObserver) processReactors(stopCh <-chan struct{}) {
 					action = FileModified
 				}
 				// increment metrics counter for this file
-				observerActionsMetrics.WithLabelValues(filename, action.name()).Inc()
+				// observerActionsMetrics.WithLabelValues(filename, action.name()).Inc()
 				// execute the register reactor
 				if err := reactors[i](filename, action); err != nil {
 					klog.Errorf("Reactor for %q failed: %v", filename, err)
@@ -149,9 +148,9 @@ var observerActionsMetrics = metrics.NewCounterVec(&metrics.CounterOpts{
 }, []string{"name", "filename"})
 
 func init() {
-	(&sync.Once{}).Do(func() {
-		legacyregistry.MustRegister(observerActionsMetrics)
-	})
+	// (&sync.Once{}).Do(func() {
+	// 	legacyregistry.MustRegister(observerActionsMetrics)
+	// })
 }
 
 // Run will start a new observer.

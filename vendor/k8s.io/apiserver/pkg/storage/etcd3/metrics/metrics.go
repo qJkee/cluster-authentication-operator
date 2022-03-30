@@ -21,7 +21,6 @@ import (
 	"time"
 
 	compbasemetrics "k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 /*
@@ -125,33 +124,33 @@ var registerMetrics sync.Once
 func Register() {
 	// Register the metrics.
 	registerMetrics.Do(func() {
-		legacyregistry.MustRegister(etcdRequestLatency)
-		legacyregistry.MustRegister(objectCounts)
-		legacyregistry.MustRegister(etcdObjectCounts)
-		legacyregistry.MustRegister(dbTotalSize)
-		legacyregistry.MustRegister(etcdBookmarkCounts)
-		legacyregistry.MustRegister(etcdLeaseObjectCounts)
-		legacyregistry.MustRegister(listStorageCount)
-		legacyregistry.MustRegister(listStorageNumFetched)
-		legacyregistry.MustRegister(listStorageNumSelectorEvals)
-		legacyregistry.MustRegister(listStorageNumReturned)
+		// legacyregistry.MustRegister(etcdRequestLatency)
+		// legacyregistry.MustRegister(objectCounts)
+		// legacyregistry.MustRegister(etcdObjectCounts)
+		// legacyregistry.MustRegister(dbTotalSize)
+		// legacyregistry.MustRegister(etcdBookmarkCounts)
+		// legacyregistry.MustRegister(etcdLeaseObjectCounts)
+		// legacyregistry.MustRegister(listStorageCount)
+		// legacyregistry.MustRegister(listStorageNumFetched)
+		// legacyregistry.MustRegister(listStorageNumSelectorEvals)
+		// legacyregistry.MustRegister(listStorageNumReturned)
 	})
 }
 
 // UpdateObjectCount sets the apiserver_storage_object_counts and etcd_object_counts (deprecated) metric.
 func UpdateObjectCount(resourcePrefix string, count int64) {
-	objectCounts.WithLabelValues(resourcePrefix).Set(float64(count))
-	etcdObjectCounts.WithLabelValues(resourcePrefix).Set(float64(count))
+	// objectCounts.WithLabelValues(resourcePrefix).Set(float64(count))
+	// etcdObjectCounts.WithLabelValues(resourcePrefix).Set(float64(count))
 }
 
 // RecordEtcdRequestLatency sets the etcd_request_duration_seconds metrics.
 func RecordEtcdRequestLatency(verb, resource string, startTime time.Time) {
-	etcdRequestLatency.WithLabelValues(verb, resource).Observe(sinceInSeconds(startTime))
+	// etcdRequestLatency.WithLabelValues(verb, resource).Observe(sinceInSeconds(startTime))
 }
 
 // RecordEtcdBookmark updates the etcd_bookmark_counts metric.
 func RecordEtcdBookmark(resource string) {
-	etcdBookmarkCounts.WithLabelValues(resource).Inc()
+	// etcdBookmarkCounts.WithLabelValues(resource).Inc()
 }
 
 // Reset resets the etcd_request_duration_seconds metric.
@@ -166,20 +165,20 @@ func sinceInSeconds(start time.Time) float64 {
 
 // UpdateEtcdDbSize sets the etcd_db_total_size_in_bytes metric.
 func UpdateEtcdDbSize(ep string, size int64) {
-	dbTotalSize.WithLabelValues(ep).Set(float64(size))
+	// dbTotalSize.WithLabelValues(ep).Set(float64(size))
 }
 
 // UpdateLeaseObjectCount sets the etcd_lease_object_counts metric.
 func UpdateLeaseObjectCount(count int64) {
 	// Currently we only store one previous lease, since all the events have the same ttl.
 	// See pkg/storage/etcd3/lease_manager.go
-	etcdLeaseObjectCounts.WithLabelValues().Observe(float64(count))
+	// etcdLeaseObjectCounts.WithLabelValues().Observe(float64(count))
 }
 
 // RecordListEtcd3Metrics notes various metrics of the cost to serve a LIST request
 func RecordStorageListMetrics(resource string, numFetched, numEvald, numReturned int) {
-	listStorageCount.WithLabelValues(resource).Inc()
-	listStorageNumFetched.WithLabelValues(resource).Add(float64(numFetched))
-	listStorageNumSelectorEvals.WithLabelValues(resource).Add(float64(numEvald))
-	listStorageNumReturned.WithLabelValues(resource).Add(float64(numReturned))
+	// listStorageCount.WithLabelValues(resource).Inc()
+	// listStorageNumFetched.WithLabelValues(resource).Add(float64(numFetched))
+	// listStorageNumSelectorEvals.WithLabelValues(resource).Add(float64(numEvald))
+	// listStorageNumReturned.WithLabelValues(resource).Add(float64(numReturned))
 }

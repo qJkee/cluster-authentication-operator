@@ -23,7 +23,6 @@ import (
 
 	"k8s.io/apiserver/pkg/admission"
 	"k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 // WebhookRejectionErrorType defines different error types that happen in a webhook rejection.
@@ -209,8 +208,8 @@ func newAdmissionMetrics() *AdmissionMetrics {
 	step.mustRegister()
 	controller.mustRegister()
 	webhook.mustRegister()
-	legacyregistry.MustRegister(webhookRejection)
-	legacyregistry.MustRegister(webhookRequest)
+	// legacyregistry.MustRegister(webhookRejection)
+	// legacyregistry.MustRegister(webhookRequest)
 	return &AdmissionMetrics{step: step, controller: controller, webhook: webhook, webhookRejection: webhookRejection, webhookRequest: webhookRequest}
 }
 
@@ -236,7 +235,7 @@ func (m *AdmissionMetrics) ObserveWebhook(ctx context.Context, name string, elap
 	if code > 600 {
 		code = 600
 	}
-	m.webhookRequest.WithContext(ctx).WithLabelValues(name, stepType, string(attr.GetOperation()), strconv.Itoa(code), strconv.FormatBool(rejected)).Inc()
+	// m.webhookRequest.WithContext(ctx).WithLabelValues(name, stepType, string(attr.GetOperation()), strconv.Itoa(code), strconv.FormatBool(rejected)).Inc()
 	m.webhook.observe(ctx, elapsed, name, stepType, string(attr.GetOperation()), strconv.FormatBool(rejected))
 }
 
@@ -247,7 +246,7 @@ func (m *AdmissionMetrics) ObserveWebhookRejection(ctx context.Context, name, st
 	if rejectionCode > 600 {
 		rejectionCode = 600
 	}
-	m.webhookRejection.WithContext(ctx).WithLabelValues(name, stepType, operation, string(errorType), strconv.Itoa(rejectionCode)).Inc()
+	// m.webhookRejection.WithContext(ctx).WithLabelValues(name, stepType, operation, string(errorType), strconv.Itoa(rejectionCode)).Inc()
 }
 
 type metricSet struct {
@@ -257,10 +256,10 @@ type metricSet struct {
 
 // MustRegister registers all the prometheus metrics in the metricSet.
 func (m *metricSet) mustRegister() {
-	legacyregistry.MustRegister(m.latencies)
-	if m.latenciesSummary != nil {
-		legacyregistry.MustRegister(m.latenciesSummary)
-	}
+	// legacyregistry.MustRegister(m.latencies)
+	// if m.latenciesSummary != nil {
+	// 	legacyregistry.MustRegister(m.latenciesSummary)
+	// }
 }
 
 // Reset resets all the prometheus metrics in the metricSet.
@@ -273,9 +272,9 @@ func (m *metricSet) reset() {
 
 // Observe records an observed admission event to all metrics in the metricSet.
 func (m *metricSet) observe(ctx context.Context, elapsed time.Duration, labels ...string) {
-	elapsedSeconds := elapsed.Seconds()
-	m.latencies.WithContext(ctx).WithLabelValues(labels...).Observe(elapsedSeconds)
-	if m.latenciesSummary != nil {
-		m.latenciesSummary.WithContext(ctx).WithLabelValues(labels...).Observe(elapsedSeconds)
-	}
+	// elapsedSeconds := elapsed.Seconds()
+	// m.latencies.WithContext(ctx).WithLabelValues(labels...).Observe(elapsedSeconds)
+	// if m.latenciesSummary != nil {
+	// 	m.latenciesSummary.WithContext(ctx).WithLabelValues(labels...).Observe(elapsedSeconds)
+	// }
 }

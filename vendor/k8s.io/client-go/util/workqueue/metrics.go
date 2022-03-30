@@ -227,35 +227,37 @@ func (f *queueMetricsFactory) setProvider(mp MetricsProvider) {
 }
 
 func (f *queueMetricsFactory) newQueueMetrics(name string, clock clock.Clock) queueMetrics {
-	mp := f.metricsProvider
-	if len(name) == 0 || mp == (noopMetricsProvider{}) {
-		return noMetrics{}
-	}
-	return &defaultQueueMetrics{
-		clock:                   clock,
-		depth:                   mp.NewDepthMetric(name),
-		adds:                    mp.NewAddsMetric(name),
-		latency:                 mp.NewLatencyMetric(name),
-		workDuration:            mp.NewWorkDurationMetric(name),
-		unfinishedWorkSeconds:   mp.NewUnfinishedWorkSecondsMetric(name),
-		longestRunningProcessor: mp.NewLongestRunningProcessorSecondsMetric(name),
-		addTimes:                map[t]time.Time{},
-		processingStartTimes:    map[t]time.Time{},
-	}
+	// mp := f.metricsProvider
+	// if len(name) == 0 || mp == (noopMetricsProvider{}) {
+	// 	return noMetrics{}
+	// }
+	// return &defaultQueueMetrics{
+	// 	clock:                   clock,
+	// 	depth:                   mp.NewDepthMetric(name),
+	// 	adds:                    mp.NewAddsMetric(name),
+	// 	latency:                 mp.NewLatencyMetric(name),
+	// 	workDuration:            mp.NewWorkDurationMetric(name),
+	// 	unfinishedWorkSeconds:   mp.NewUnfinishedWorkSecondsMetric(name),
+	// 	longestRunningProcessor: mp.NewLongestRunningProcessorSecondsMetric(name),
+	// 	addTimes:                map[t]time.Time{},
+	// 	processingStartTimes:    map[t]time.Time{},
+	// }
+	return noMetrics{}
 }
 
 func newRetryMetrics(name string) retryMetrics {
-	var ret *defaultRetryMetrics
-	if len(name) == 0 {
-		return ret
-	}
-	return &defaultRetryMetrics{
-		retries: globalMetricsFactory.metricsProvider.NewRetriesMetric(name),
-	}
+	return &defaultRetryMetrics{}
+	// var ret *defaultRetryMetrics
+	// if len(name) == 0 {
+	// 	return ret
+	// }
+	// return &defaultRetryMetrics{
+	// 	retries: globalMetricsFactory.metricsProvider.NewRetriesMetric(name),
+	// }
 }
 
 // SetProvider sets the metrics provider for all subsequently created work
 // queues. Only the first call has an effect.
 func SetProvider(metricsProvider MetricsProvider) {
-	globalMetricsFactory.setProvider(metricsProvider)
+	globalMetricsFactory.setProvider(noopMetricsProvider{})
 }

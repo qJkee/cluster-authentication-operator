@@ -30,7 +30,6 @@ import (
 	"k8s.io/apiserver/pkg/authentication/authenticator"
 	"k8s.io/apiserver/pkg/authentication/user"
 	"k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 /*
@@ -68,7 +67,7 @@ var clientCertificateExpirationHistogram = metrics.NewHistogram(
 )
 
 func init() {
-	legacyregistry.MustRegister(clientCertificateExpirationHistogram)
+	// legacyregistry.MustRegister(clientCertificateExpirationHistogram)
 }
 
 // UserConversion defines an interface for extracting user info from a client certificate chain
@@ -148,8 +147,8 @@ func (a *Authenticator) AuthenticateRequest(req *http.Request) (*authenticator.R
 		}
 	}
 
-	remaining := req.TLS.PeerCertificates[0].NotAfter.Sub(time.Now())
-	clientCertificateExpirationHistogram.WithContext(req.Context()).Observe(remaining.Seconds())
+	// remaining := req.TLS.PeerCertificates[0].NotAfter.Sub(time.Now())
+	// clientCertificateExpirationHistogram.WithContext(req.Context()).Observe(remaining.Seconds())
 	chains, err := req.TLS.PeerCertificates[0].Verify(optsCopy)
 	if err != nil {
 		return nil, false, fmt.Errorf(

@@ -11,7 +11,6 @@ import (
 	corev1client "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 	"k8s.io/klog/v2"
 )
 
@@ -87,9 +86,9 @@ var eventsCounterMetric = metrics.NewCounterVec(&metrics.CounterOpts{
 }, []string{"severity"})
 
 func init() {
-	(&sync.Once{}).Do(func() {
-		legacyregistry.MustRegister(eventsCounterMetric)
-	})
+	// (&sync.Once{}).Do(func() {
+	// 	legacyregistry.MustRegister(eventsCounterMetric)
+	// })
 }
 
 func (r *upstreamRecorder) ForComponent(componentName string) Recorder {
@@ -145,7 +144,7 @@ func (r *upstreamRecorder) incrementEventsCounter(severity string) {
 	if r.involvedObjectRef == nil {
 		return
 	}
-	eventsCounterMetric.WithLabelValues(severity).Inc()
+	// eventsCounterMetric.WithLabelValues(severity).Inc()
 }
 
 // Event emits the normal type event.

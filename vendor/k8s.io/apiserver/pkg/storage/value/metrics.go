@@ -20,10 +20,7 @@ import (
 	"sync"
 	"time"
 
-	"google.golang.org/grpc/status"
-
 	"k8s.io/component-base/metrics"
-	"k8s.io/component-base/metrics/legacyregistry"
 )
 
 const (
@@ -101,38 +98,38 @@ var registerMetrics sync.Once
 
 func RegisterMetrics() {
 	registerMetrics.Do(func() {
-		legacyregistry.MustRegister(transformerLatencies)
-		legacyregistry.MustRegister(transformerOperationsTotal)
-		legacyregistry.MustRegister(envelopeTransformationCacheMissTotal)
-		legacyregistry.MustRegister(dataKeyGenerationLatencies)
-		legacyregistry.MustRegister(dataKeyGenerationFailuresTotal)
+		// legacyregistry.MustRegister(transformerLatencies)
+		// legacyregistry.MustRegister(transformerOperationsTotal)
+		// legacyregistry.MustRegister(envelopeTransformationCacheMissTotal)
+		// legacyregistry.MustRegister(dataKeyGenerationLatencies)
+		// legacyregistry.MustRegister(dataKeyGenerationFailuresTotal)
 	})
 }
 
 // RecordTransformation records latencies and count of TransformFromStorage and TransformToStorage operations.
 // Note that transformation_failures_total metric is deprecated, use transformation_operations_total instead.
 func RecordTransformation(transformationType, transformerPrefix string, start time.Time, err error) {
-	transformerOperationsTotal.WithLabelValues(transformationType, transformerPrefix, status.Code(err).String()).Inc()
+	// transformerOperationsTotal.WithLabelValues(transformationType, transformerPrefix, status.Code(err).String()).Inc()
 
 	switch {
 	case err == nil:
-		transformerLatencies.WithLabelValues(transformationType).Observe(sinceInSeconds(start))
+		// transformerLatencies.WithLabelValues(transformationType).Observe(sinceInSeconds(start))
 	}
 }
 
 // RecordCacheMiss records a miss on Key Encryption Key(KEK) - call to KMS was required to decrypt KEK.
 func RecordCacheMiss() {
-	envelopeTransformationCacheMissTotal.Inc()
+	// envelopeTransformationCacheMissTotal.Inc()
 }
 
 // RecordDataKeyGeneration records latencies and count of Data Encryption Key generation operations.
 func RecordDataKeyGeneration(start time.Time, err error) {
 	if err != nil {
-		dataKeyGenerationFailuresTotal.Inc()
+		// dataKeyGenerationFailuresTotal.Inc()
 		return
 	}
 
-	dataKeyGenerationLatencies.Observe(sinceInSeconds(start))
+	// dataKeyGenerationLatencies.Observe(sinceInSeconds(start))
 }
 
 // sinceInSeconds gets the time since the specified start in seconds.

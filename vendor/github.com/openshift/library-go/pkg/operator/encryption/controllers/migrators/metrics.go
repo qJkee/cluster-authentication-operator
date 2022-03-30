@@ -74,20 +74,20 @@ func (m *migratorMetrics) Reset() {
 
 // ObserveObjectsMigrated adds the number of migrated objects for a resource type
 func (m *migratorMetrics) ObserveObjectsMigrated(added int, resource string) {
-	m.objectsMigrated.WithLabelValues(resource).Add(float64(added))
+	// m.objectsMigrated.WithLabelValues(resource).Add(float64(added))
 }
 
 // ObserveSucceededMigration increments the number of successful migrations for a resource type
 func (m *migratorMetrics) ObserveSucceededMigration(resource string) {
-	m.migration.WithLabelValues(resource, "Succeeded").Add(float64(1))
+	// m.migration.WithLabelValues(resource, "Succeeded").Add(float64(1))
 }
 
 // ObserveFailedMigration increments the number of failed migrations for a resource type
 func (m *migratorMetrics) ObserveFailedMigration(resource string) {
-	m.migration.WithLabelValues(resource, "Failed").Add(float64(1))
+	// m.migration.WithLabelValues(resource, "Failed").Add(float64(1))
 }
 
 // ObserveMigrationDuration records migration duration in seconds for a resource type
 func (m *migratorMetrics) ObserveSucceededMigrationDuration(seconds float64, resource string) {
-	m.migrationDuration.WithLabelValues(resource).Observe(seconds)
+	// m.migrationDuration.WithLabelValues(resource).Observe(seconds)
 }

@@ -18,7 +18,6 @@ package metrics
 
 import (
 	"context"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -52,9 +51,9 @@ var registerMetrics sync.Once
 // Register all metrics.
 func Register() {
 	registerMetrics.Do(func() {
-		for _, metric := range metrics {
-			legacyregistry.MustRegister(metric)
-		}
+		// for _, metric := range metrics {
+		// 	legacyregistry.MustRegister(metric)
+		// }
 	})
 }
 
@@ -64,10 +63,10 @@ type resettable interface {
 
 // Reset all metrics to zero
 func Reset() {
-	for _, metric := range metrics {
-		rm := metric.(resettable)
-		rm.Reset()
-	}
+	// for _, metric := range metrics {
+	// 	rm := metric.(resettable)
+	// 	rm.Reset()
+	// }
 }
 
 // GatherAndCompare the given metrics with the given Prometheus syntax expected value
@@ -311,96 +310,96 @@ var (
 		[]string{priorityLevel, "success"},
 	)
 
-	metrics = Registerables{
-		apiserverRejectedRequestsTotal,
-		apiserverDispatchedRequestsTotal,
-		apiserverCurrentR,
-		apiserverDispatchR,
-		apiserverLatestS,
-		apiserverNextSBounds,
-		apiserverNextDiscountedSBounds,
-		apiserverCurrentInqueueRequests,
-		apiserverRequestQueueLength,
-		apiserverRequestConcurrencyLimit,
-		apiserverRequestConcurrencyInUse,
-		apiserverCurrentExecutingRequests,
-		apiserverRequestWaitingSeconds,
-		apiserverRequestExecutionSeconds,
-		watchCountSamples,
-		apiserverEpochAdvances,
-	}.
-		Append(PriorityLevelExecutionSeatsObserverGenerator.metrics()...).
-		Append(PriorityLevelConcurrencyObserverPairGenerator.metrics()...).
-		Append(ReadWriteConcurrencyObserverPairGenerator.metrics()...)
+	// metrics = Registerables{
+	// 	apiserverRejectedRequestsTotal,
+	// 	apiserverDispatchedRequestsTotal,
+	// 	apiserverCurrentR,
+	// 	apiserverDispatchR,
+	// 	apiserverLatestS,
+	// 	apiserverNextSBounds,
+	// 	apiserverNextDiscountedSBounds,
+	// 	apiserverCurrentInqueueRequests,
+	// 	apiserverRequestQueueLength,
+	// 	apiserverRequestConcurrencyLimit,
+	// 	apiserverRequestConcurrencyInUse,
+	// 	apiserverCurrentExecutingRequests,
+	// 	apiserverRequestWaitingSeconds,
+	// 	apiserverRequestExecutionSeconds,
+	// 	watchCountSamples,
+	// 	apiserverEpochAdvances,
+	// }.
+	// 	Append(PriorityLevelExecutionSeatsObserverGenerator.metrics()...).
+	// 	Append(PriorityLevelConcurrencyObserverPairGenerator.metrics()...).
+	// 	Append(ReadWriteConcurrencyObserverPairGenerator.metrics()...)
 )
 
 // AddRequestsInQueues adds the given delta to the gauge of the # of requests in the queues of the specified flowSchema and priorityLevel
 func AddRequestsInQueues(ctx context.Context, priorityLevel, flowSchema string, delta int) {
-	apiserverCurrentInqueueRequests.WithLabelValues(priorityLevel, flowSchema).Add(float64(delta))
+	// apiserverCurrentInqueueRequests.WithLabelValues(priorityLevel, flowSchema).Add(float64(delta))
 }
 
 // AddRequestsExecuting adds the given delta to the gauge of executing requests of the given flowSchema and priorityLevel
 func AddRequestsExecuting(ctx context.Context, priorityLevel, flowSchema string, delta int) {
-	apiserverCurrentExecutingRequests.WithLabelValues(priorityLevel, flowSchema).Add(float64(delta))
+	// apiserverCurrentExecutingRequests.WithLabelValues(priorityLevel, flowSchema).Add(float64(delta))
 }
 
 // SetCurrentR sets the current-R (virtualTime) gauge for the given priority level
 func SetCurrentR(priorityLevel string, r float64) {
-	apiserverCurrentR.WithLabelValues(priorityLevel).Set(r)
+	// apiserverCurrentR.WithLabelValues(priorityLevel).Set(r)
 }
 
 // SetLatestS sets the latest-S (virtual time of dispatched request) gauge for the given priority level
 func SetDispatchMetrics(priorityLevel string, r, s, sMin, sMax, discountedSMin, discountedSMax float64) {
-	apiserverDispatchR.WithLabelValues(priorityLevel).Set(r)
-	apiserverLatestS.WithLabelValues(priorityLevel).Set(s)
-	apiserverNextSBounds.WithLabelValues(priorityLevel, "min").Set(sMin)
-	apiserverNextSBounds.WithLabelValues(priorityLevel, "max").Set(sMax)
-	apiserverNextDiscountedSBounds.WithLabelValues(priorityLevel, "min").Set(discountedSMin)
-	apiserverNextDiscountedSBounds.WithLabelValues(priorityLevel, "max").Set(discountedSMax)
+	// apiserverDispatchR.WithLabelValues(priorityLevel).Set(r)
+	// apiserverLatestS.WithLabelValues(priorityLevel).Set(s)
+	// apiserverNextSBounds.WithLabelValues(priorityLevel, "min").Set(sMin)
+	// apiserverNextSBounds.WithLabelValues(priorityLevel, "max").Set(sMax)
+	// apiserverNextDiscountedSBounds.WithLabelValues(priorityLevel, "min").Set(discountedSMin)
+	// apiserverNextDiscountedSBounds.WithLabelValues(priorityLevel, "max").Set(discountedSMax)
 }
 
 // AddRequestConcurrencyInUse adds the given delta to the gauge of concurrency in use by
 // the currently executing requests of the given flowSchema and priorityLevel
 func AddRequestConcurrencyInUse(priorityLevel, flowSchema string, delta int) {
-	apiserverRequestConcurrencyInUse.WithLabelValues(priorityLevel, flowSchema).Add(float64(delta))
+	// apiserverRequestConcurrencyInUse.WithLabelValues(priorityLevel, flowSchema).Add(float64(delta))
 }
 
 // UpdateSharedConcurrencyLimit updates the value for the concurrency limit in flow control
 func UpdateSharedConcurrencyLimit(priorityLevel string, limit int) {
-	apiserverRequestConcurrencyLimit.WithLabelValues(priorityLevel).Set(float64(limit))
+	// apiserverRequestConcurrencyLimit.WithLabelValues(priorityLevel).Set(float64(limit))
 }
 
 // AddReject increments the # of rejected requests for flow control
 func AddReject(ctx context.Context, priorityLevel, flowSchema, reason string) {
-	apiserverRejectedRequestsTotal.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema, reason).Add(1)
+	// apiserverRejectedRequestsTotal.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema, reason).Add(1)
 }
 
 // AddDispatch increments the # of dispatched requests for flow control
 func AddDispatch(ctx context.Context, priorityLevel, flowSchema string) {
-	apiserverDispatchedRequestsTotal.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema).Add(1)
+	// apiserverDispatchedRequestsTotal.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema).Add(1)
 }
 
 // ObserveQueueLength observes the queue length for flow control
 func ObserveQueueLength(ctx context.Context, priorityLevel, flowSchema string, length int) {
-	apiserverRequestQueueLength.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema).Observe(float64(length))
+	// apiserverRequestQueueLength.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema).Observe(float64(length))
 }
 
 // ObserveWaitingDuration observes the queue length for flow control
 func ObserveWaitingDuration(ctx context.Context, priorityLevel, flowSchema, execute string, waitTime time.Duration) {
-	apiserverRequestWaitingSeconds.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema, execute).Observe(waitTime.Seconds())
+	// apiserverRequestWaitingSeconds.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema, execute).Observe(waitTime.Seconds())
 }
 
 // ObserveExecutionDuration observes the execution duration for flow control
 func ObserveExecutionDuration(ctx context.Context, priorityLevel, flowSchema string, executionTime time.Duration) {
-	apiserverRequestExecutionSeconds.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema).Observe(executionTime.Seconds())
+	// apiserverRequestExecutionSeconds.WithContext(ctx).WithLabelValues(priorityLevel, flowSchema).Observe(executionTime.Seconds())
 }
 
 // ObserveWatchCount notes a sampling of a watch count
 func ObserveWatchCount(ctx context.Context, priorityLevel, flowSchema string, count int) {
-	watchCountSamples.WithLabelValues(priorityLevel, flowSchema).Observe(float64(count))
+	// watchCountSamples.WithLabelValues(priorityLevel, flowSchema).Observe(float64(count))
 }
 
 // AddEpochAdvance notes an advance of the progress meter baseline for a given priority level
 func AddEpochAdvance(ctx context.Context, priorityLevel string, success bool) {
-	apiserverEpochAdvances.WithContext(ctx).WithLabelValues(priorityLevel, strconv.FormatBool(success)).Inc()
+	// apiserverEpochAdvances.WithContext(ctx).WithLabelValues(priorityLevel, strconv.FormatBool(success)).Inc()
 }
